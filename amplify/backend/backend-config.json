@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "eparcheeba6e3f16": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-eparchee-dev-74713-authRole",
+      "UnauthRoleArn": "arn:aws:iam::915213374970:role/amplify-eparchee-dev-74713-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::915213374970:role/amplify-eparchee-dev-74713-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-eparchee-dev-74713-deployment",
+      "UnauthRoleName": "amplify-eparchee-dev-74713-unauthRole",
+      "StackName": "amplify-eparchee-dev-74713",
+      "StackId": "arn:aws:cloudformation:eu-west-2:915213374970:stack/amplify-eparchee-dev-74713/ffaac650-823d-11eb-a72a-06ebba6beadc",
+      "AmplifyAppId": "dl4hest2ptovf"
+    },
+    "categories": {
+      "auth": {
+        "eparcheeba6e3f16": {}
+      }
+    }
+  }
+}
