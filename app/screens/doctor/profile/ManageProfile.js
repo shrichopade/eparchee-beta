@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { Button, Icon } from 'native-base';
+import { Auth } from 'aws-amplify';
 
 import pageStyles from '../../common/PageStyle.js';
 import DoctorFooter from '../DoctorFooter';
@@ -9,6 +10,16 @@ export default class ManageProfile extends React.Component {
 
     constructor() {
         super();
+    }
+
+    signOut = async () => {
+        try {
+          await Auth.signOut();
+          //updateAuthState('loggedOut');
+          this.props.navigation.navigate('SignIn');
+        } catch (error) {
+          console.log('Error signing out: ', error);
+        }
     }
 
     render() {
@@ -33,7 +44,7 @@ export default class ManageProfile extends React.Component {
                             <Text style={styles.buttonText}>Manage Settings</Text>
                         </Button>
                         <Button danger iconLeft style={styles.buttonStyle}
-                            onPress={() => this.props.navigation.navigate('SignIn')}>
+                            onPress={() => this.signOut()}>
                             <Icon name='navigate' />
                             <Text style={styles.buttonText}>Log out</Text>
                         </Button>
