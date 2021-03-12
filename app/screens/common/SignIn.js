@@ -2,6 +2,7 @@
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Text } from 'native-base';
+import { Auth } from 'aws-amplify';
 import ValidationComponent from 'react-native-form-validator';
 
 import pageStyles from './PageStyle.js'
@@ -16,27 +17,34 @@ export default class SignIn extends ValidationComponent {
         super(props);
         this.state = {
           username: '',
-          password: ''
+          password: '',
         }
       }
 
-    signIn = () => {
+    signIn = async () => {
         this._validateInputs(); 
 
         if(this.getErrorMessages().length == 0) {
+            
             try {
+                await Auth.signIn(this.state.username, this.state.password);
+                console.log(' Success Login');
+                //updateAuthState('loggedIn');
+
                 if(this.state.username == "P@gmail.com" || this.state.username == "p@gmail.com" ) {
-                this.props.navigation.navigate('PatientHome')
+                    this.props.navigation.navigate('PatientHome')
                 } else if(this.state.username == "D@gmail.com" || this.state.username == "d@gmail.com" ) {
-                this.props.navigation.navigate('DoctorHome')
+                    this.props.navigation.navigate('DoctorHome')
                 } else if(this.state.username == "C@gmail.com" || this.state.username == "c@gmail.com" ) {
-                this.props.navigation.navigate('ChemistHome')
+                    this.props.navigation.navigate('ChemistHome')
                 } else {
-                this.props.navigation.navigate('PatientHome')
+                    this.props.navigation.navigate('PatientHome')
                 }
                 console.log(' Success');
-            } catch (error) {
-                console.log(' Error signing in...', error);
+            } catch(UserNotFoundException) {
+                console.log('User not found => ', UserNotFoundException)
+                this.props.navigation.navigate('SignIn', {loginStatus: 'Invalid login details, Please try again...'})
+                console.log('NAV -->', this.props.navigation)
             }
         }
     }
@@ -56,12 +64,22 @@ export default class SignIn extends ValidationComponent {
     }
 
     render() {
+        //const { params } = this.props.navigation.state;
+        //const { loginStatus } = params ? params.loginStatus : null;
+        //const loginStatus = this.props.navigation.getParam('loginStatus', '')
+        //const { loginStatus } = "Invalid user";
+
         return (
             <SafeAreaView  style={pageStyles.container}>
                 <View style={pageStyles.screen}>
                     <View style={pageStyles.body}>
                         <Image source={require('../../../assets/images/parchee-logo.png')} 
                             style={styles.imageTitle} />
+                        
+                        {/*<Text key="loginStatus" style={styles.errorMsgText}>
+                            { loginStatus }
+                        </Text> */}
+
                         <AppTextInput
                             value={this.state.username}
                             onChangeText={(username) => {
@@ -82,7 +100,7 @@ export default class SignIn extends ValidationComponent {
                             />
                         {this.isFieldInError('username') 
                             && this.getErrorsInField('username').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key="usernameErrors" style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
@@ -107,7 +125,7 @@ export default class SignIn extends ValidationComponent {
                             />
                          {this.isFieldInError('password') 
                             && this.getErrorsInField('password').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key="passwordErrors" style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
