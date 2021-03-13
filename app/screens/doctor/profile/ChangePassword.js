@@ -1,16 +1,18 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { Button } from 'native-base';
+import ValidationComponent from 'react-native-form-validator';
+import { Auth } from 'aws-amplify';
 
 import pageStyles from '../../common/PageStyle.js';
 import DoctorFooter from '../DoctorFooter';
 import AppTextInput from '../../../components/AppTextInput';
 
 
-export default class ChangePassword extends React.Component {
+export default class ChangePassword extends ValidationComponent {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
           oldPassword: '',
           password: '',
@@ -18,11 +20,31 @@ export default class ChangePassword extends React.Component {
         }
     }
 
-    inputValueUpdate = (val, prop) => {
-        const state = this.state;
-        state[prop] = val;
-        this.setState(state);
+    changePassword = async () => {
+        this._validateInputs(); 
+  
+        if(this.getErrorMessages().length == 0) {
+            try {
+                const currentUser = await Auth.currentAuthenticatedUser();
+                await Auth.changePassword(currentUser, 
+                        this.state.oldPassword, this.state.password);
+                console.log('Password changed successfully');
+                this.props.navigation.navigate('DoctorHome');
+            } catch(error) {
+                console.log("Error in sending code", error);
+            }
+        }
     }
+
+    _validateInputs() {
+        // Call ValidationComponent validate method
+        this.validate({
+            oldPassword: {required: true, minlength: 3, maxlength: 8},
+            password: {required: true, minlength: 3, maxlength: 8},
+            confirmPassword: {equalPassword : this.state.password}
+        });
+    }
+
 
     render() {
         return (
@@ -31,17 +53,42 @@ export default class ChangePassword extends React.Component {
                     <View style={pageStyles.body}>
                         <Text style={styles.pageTitle}>CHANGE PASSWORD</Text>
                         <AppTextInput
-                            value={this.state.passcode}
-                            onChangeText={(val) => this.inputValueUpdate(val, 'oldPassword')}
-                            leftIcon="file-code"
+                            value={this.state.oldPassword}
+                            onChangeText={(oldPassword) => {
+                                this.setState({ oldPassword },
+                                    () => {
+                                        this.validate({
+                                            oldPassword: { required: true, minlength: 3, maxlength: 8 },
+                                        })
+                                      }
+                                    )                                    
+                                }
+                            }
+                            leftIcon="lock"
                             placeholder="Enter current password"
                             autoCapitalize="none"
-                            keyboardType="phone-pad"
-                            textContentType="oneTimeCode"
+                            autoCorrect={false}
+                            secureTextEntry
+                            textContentType="password"
                             />
+                        {this.isFieldInError('oldPassword') 
+                            && this.getErrorsInField('oldPassword').map(errorMessage => 
+                            <Text key={errorMessage} style={styles.errorMsgText}>
+                                {errorMessage}
+                            </Text>) 
+                        }
                         <AppTextInput
                             value={this.state.password}
-                            onChangeText={(val) => this.inputValueUpdate(val, 'password')}
+                            onChangeText={(password) => {
+                                this.setState({ password },
+                                    () => {
+                                        this.validate({
+                                            password: { required: true, minlength: 3, maxlength: 8 },
+                                        })
+                                      }
+                                    )                                    
+                                }
+                            }
                             leftIcon="lock"
                             placeholder="Enter new password"
                             autoCapitalize="none"
@@ -49,9 +96,24 @@ export default class ChangePassword extends React.Component {
                             secureTextEntry
                             textContentType="password"
                             />
+                        {this.isFieldInError('password') 
+                            && this.getErrorsInField('password').map(errorMessage => 
+                            <Text key={errorMessage} style={styles.errorMsgText}>
+                                {errorMessage}
+                            </Text>) 
+                        }
                         <AppTextInput
                             value={this.state.confirmPassword}
-                            onChangeText={(val) => this.inputValueUpdate(val, 'confirmPassword')}
+                            onChangeText={(confirmPassword) => {
+                                this.setState({ confirmPassword },
+                                    () => {
+                                        this.validate({
+                                            confirmPassword: { equalPassword : this.state.password },
+                                        })
+                                      }
+                                    )                                    
+                                }
+                            }
                             leftIcon="lock"
                             placeholder="Confirm new password"
                             autoCapitalize="none"
@@ -59,8 +121,14 @@ export default class ChangePassword extends React.Component {
                             secureTextEntry
                             textContentType="password"
                             />
+                        {this.isFieldInError('confirmPassword') 
+                            && this.getErrorsInField('confirmPassword').map(errorMessage => 
+                            <Text key={errorMessage} style={styles.errorMsgText}>
+                                {errorMessage}
+                            </Text>) 
+                        }
                         <Button success style={styles.buttonStyle} title="Submit" 
-                            onPress={() => this.props.navigation.navigate('DoctorConfirmChanges')}>
+                            onPress={() => this.changePassword() } >
                             <Text style={styles.buttonText}>Submit</Text>
                         </Button>
                     </View>
@@ -96,6 +164,21 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
         textTransform: 'uppercase'
+    },
+    errorMsgText: {
+        fontFamily: 'Arial',
+        color: 'red',
+        fontSize: 14,
+        marginLeft: 15,
+        marginBottom: 10,
+    },
+    errorImage: {
+        width: 14,
+        height: 14,
+        borderRadius: 14 / 2,
+        marginTop: 2,
+        marginRight: 5,
+        alignSelf: 'center'
     },
 });
 

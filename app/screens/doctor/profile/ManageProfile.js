@@ -14,7 +14,7 @@ export default class ManageProfile extends React.Component {
 
     signOut = async () => {
         try {
-          await Auth.signOut();
+          await Auth.signOut({ global: true });
           //updateAuthState('loggedOut');
           this.props.navigation.navigate('SignIn');
         } catch (error) {
