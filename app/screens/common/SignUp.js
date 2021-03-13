@@ -66,7 +66,7 @@ export default class SignUp extends ValidationComponent {
             mobileNumber: {required: true, numbers: true, minlength: 10, maxlength: 10},
             referralId: {required: true, numbers: true, minlength: 3, maxlength: 3},
             username: {required: true, email: true},
-            password: {required: true, minlength: 3, maxlength: 8},
+            password: {required: true, minlength:8, maxlength:12},
             confirmPassword: {equalPassword : this.state.password}
         });
     }
@@ -212,7 +212,7 @@ export default class SignUp extends ValidationComponent {
                                 this.setState({ password },
                                     () => {
                                         this.validate({
-                                            password: { required: true, minlength: 3, maxlength: 8 },
+                                            password: { required: true, minlength:8, maxlength:12 },
                                         })
                                       }
                                     )                                    

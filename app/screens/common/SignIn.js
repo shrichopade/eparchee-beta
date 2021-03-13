@@ -59,7 +59,7 @@ export default class SignIn extends ValidationComponent {
         // Call ValidationComponent validate method
         this.validate({
           username: {required: true, email: true} ,
-          password: {minlength:3, maxlength:8, required: true},
+          password: {minlength:8, maxlength:12, required: true},
         });
     }
 
@@ -110,7 +110,7 @@ export default class SignIn extends ValidationComponent {
                                     this.setState({ password },
                                         () => {
                                             this.validate({
-                                                password: { required: true, minlength:3, maxlength:8 },
+                                                password: { required: true, minlength:8, maxlength:12 },
                                             })
                                         }
                                     )                                    

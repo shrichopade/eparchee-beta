@@ -48,7 +48,7 @@ export default class ResetPassword extends ValidationComponent {
         this.validate({
             passcode: {required: true, numbers: true, minlength: 6, maxlength: 6},
             username: {required: true, email: true},
-            password: {required: true, minlength: 3, maxlength: 8},
+            password: {required: true, minlength:8, maxlength:12},
             confirmPassword: {equalPassword : this.state.password}
         });
     }
@@ -112,7 +112,7 @@ export default class ResetPassword extends ValidationComponent {
                                 this.setState({ password },
                                     () => {
                                         this.validate({
-                                            password: { required: true, minlength: 3, maxlength: 8 },
+                                            password: { required: true, minlength:8, maxlength:12 },
                                         })
                                       }
                                     )                                    

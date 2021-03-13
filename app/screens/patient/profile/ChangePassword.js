@@ -40,8 +40,8 @@ export default class ChangePassword extends ValidationComponent {
     _validateInputs() {
         // Call ValidationComponent validate method
         this.validate({
-            oldPassword: {required: true, minlength: 3, maxlength: 8},
-            password: {required: true, minlength: 3, maxlength: 8},
+            oldPassword: {required: true, minlength:8, maxlength:12},
+            password: {required: true, minlength:8, maxlength:12},
             confirmPassword: {equalPassword : this.state.password}
         });
     }
@@ -59,7 +59,7 @@ export default class ChangePassword extends ValidationComponent {
                                 this.setState({ oldPassword },
                                     () => {
                                         this.validate({
-                                            oldPassword: { required: true, minlength: 3, maxlength: 8 },
+                                            oldPassword: { required: true, minlength:8, maxlength:12 },
                                         })
                                       }
                                     )                                    
@@ -84,7 +84,7 @@ export default class ChangePassword extends ValidationComponent {
                                 this.setState({ password },
                                     () => {
                                         this.validate({
-                                            password: { required: true, minlength: 3, maxlength: 8 },
+                                            password: { required: true, minlength:8, maxlength:12 },
                                         })
                                       }
                                     )                                    
