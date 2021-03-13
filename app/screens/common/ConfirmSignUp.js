@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
+import { Auth } from 'aws-amplify';
 
 import pageStyles from './PageStyle.js'
 import AppButton from '../../components/AppButton';
@@ -16,32 +17,28 @@ export default class ConfirmSignUp extends ValidationComponent {
         this.state = {
           passcode: '',
           username: '',
-          password: '',
-          confirmPassword: ''
         }
     }
 
-    confirmSignUp = () => {
+    confirmSignUp = async () => {
         this._validateInputs(); 
   
         if(this.getErrorMessages().length == 0) {
-          this.props.navigation.navigate('SignIn')
+            try {
+                await Auth.confirmSignUp(username, authCode);
+                console.log(' Code confirmed');
+                this.props.navigation.navigate('SignIn');
+            } catch(error) {
+                console.log("Error in activating the user", error)
+            }
         }
-    }
-
-    inputValueUpdate = (val, prop) => {
-        const state = this.state;
-        state[prop] = val;
-        this.setState(state);
     }
 
     _validateInputs() {
         // Call ValidationComponent validate method
         this.validate({
             passcode: {required: true, numbers: true, minlength: 6, maxlength: 6},
-            username: {required: true, email: true},
-            password: {required: true, minlength: 3, maxlength: 8},
-            confirmPassword: {equalPassword : this.state.password}
+            username: {required: true, email: true}
         });
     }
 
@@ -70,7 +67,7 @@ export default class ConfirmSignUp extends ValidationComponent {
                             />
                         {this.isFieldInError('passcode') 
                             && this.getErrorsInField('passcode').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
@@ -93,57 +90,7 @@ export default class ConfirmSignUp extends ValidationComponent {
                         />
                         {this.isFieldInError('username') 
                             && this.getErrorsInField('username').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
-                                {errorMessage}
-                            </Text>) 
-                        }
-                        <AppTextInput
-                            value={this.state.password}
-                            onChangeText={(password) => {
-                                this.setState({ password },
-                                    () => {
-                                        this.validate({
-                                            password: { required: true, minlength: 3, maxlength: 8 },
-                                        })
-                                      }
-                                    )                                    
-                                }
-                            }
-                            leftIcon="lock"
-                            placeholder="Enter password"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            secureTextEntry
-                            textContentType="password"
-                            />
-                        {this.isFieldInError('password') 
-                            && this.getErrorsInField('password').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
-                                {errorMessage}
-                            </Text>) 
-                        }
-                        <AppTextInput
-                            value={this.state.confirmPassword}
-                            onChangeText={(confirmPassword) => {
-                                this.setState({ confirmPassword },
-                                    () => {
-                                        this.validate({
-                                            confirmPassword: { equalPassword : this.state.password },
-                                        })
-                                      }
-                                    )                                    
-                                }
-                            }
-                            leftIcon="lock"
-                            placeholder="Confirm password"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            secureTextEntry
-                            textContentType="password"
-                            />
-                        {this.isFieldInError('confirmPassword') 
-                            && this.getErrorsInField('confirmPassword').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }

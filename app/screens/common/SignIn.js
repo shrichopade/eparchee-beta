@@ -100,7 +100,7 @@ export default class SignIn extends ValidationComponent {
                             />
                         {this.isFieldInError('username') 
                             && this.getErrorsInField('username').map(errorMessage => 
-                            <Text key="usernameErrors" style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
@@ -125,7 +125,7 @@ export default class SignIn extends ValidationComponent {
                             />
                          {this.isFieldInError('password') 
                             && this.getErrorsInField('password').map(errorMessage => 
-                            <Text key="passwordErrors" style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
