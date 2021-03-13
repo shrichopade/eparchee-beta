@@ -30,16 +30,16 @@ export default class SignIn extends ValidationComponent {
                 await Auth.signIn(this.state.username, this.state.password);
                 console.log(' Successfully Login');
                 //updateAuthState('loggedIn');
-
-                if(this.state.username == "P@gmail.com" || this.state.username == "p@gmail.com" ) {
+                const userData = await Auth.currentUserInfo();
+                const userCategory = userData.attributes['custom:userCategory'];
+                console.log("User type is : ", userCategory);
+                if(userCategory == "P") {
                     this.props.navigation.navigate('PatientHome')
-                } else if(this.state.username == "D@gmail.com" || this.state.username == "d@gmail.com" ) {
+                } else if(userCategory == 'D' ) {
                     this.props.navigation.navigate('DoctorHome')
-                } else if(this.state.username == "C@gmail.com" || this.state.username == "c@gmail.com" ) {
+                } else if(userCategory == 'C' ) {
                     this.props.navigation.navigate('ChemistHome')
-                } else {
-                    this.props.navigation.navigate('PatientHome')
-                }
+                } 
             } catch(UserNotFoundException) {
                 console.log('User not found => ', UserNotFoundException)
                 this.props.navigation.navigate('SignIn', {loginStatus: 'Invalid login details, Please try again...'})
