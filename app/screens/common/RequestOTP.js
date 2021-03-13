@@ -63,7 +63,7 @@ export default class RequestOTP extends ValidationComponent {
                         />
                         {this.isFieldInError('username') 
                             && this.getErrorsInField('username').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }

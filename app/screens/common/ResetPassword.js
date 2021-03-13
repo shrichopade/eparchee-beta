@@ -68,7 +68,7 @@ export default class ResetPassword extends ValidationComponent {
                             />
                         {this.isFieldInError('passcode') 
                             && this.getErrorsInField('passcode').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
@@ -93,7 +93,7 @@ export default class ResetPassword extends ValidationComponent {
                             />
                         {this.isFieldInError('password') 
                             && this.getErrorsInField('password').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
@@ -118,7 +118,7 @@ export default class ResetPassword extends ValidationComponent {
                             />
                         {this.isFieldInError('confirmPassword') 
                             && this.getErrorsInField('confirmPassword').map(errorMessage => 
-                            <Text style={styles.errorMsgText}>
+                            <Text key={errorMessage} style={styles.errorMsgText}>
                                 {errorMessage}
                             </Text>) 
                         }
