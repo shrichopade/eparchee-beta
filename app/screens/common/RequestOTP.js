@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
+import { Auth } from 'aws-amplify';
 
 import pageStyles from './PageStyle.js'
 import AppButton from '../../components/AppButton';
@@ -17,18 +18,17 @@ export default class RequestOTP extends ValidationComponent {
       }
     }
 
-    requestOTP = () => {
+    requestOTP = async () => {
       this._validateInputs(); 
 
       if(this.getErrorMessages().length == 0) {
-        this.props.navigation.navigate('ResetPassword')
+          try {
+              await Auth.forgotPassword(this.state.username);
+              this.props.navigation.navigate('ResetPassword');
+          } catch(error) {
+              console.log("Error in sending code", error);
+          }
       }
-    }
-  
-    inputValueUpdate = (val, prop) => {
-      const state = this.state;
-      state[prop] = val;
-      this.setState(state);
     }
   
     _validateInputs() {

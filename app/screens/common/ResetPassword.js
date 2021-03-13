@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { Text } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
+import { Auth } from 'aws-amplify';
 
 import pageStyles from './PageStyle.js'
 import AppButton from '../../components/AppButton';
@@ -15,16 +16,23 @@ export default class ResetPassword extends ValidationComponent {
         super(props);
         this.state = {
           passcode: '',
+          username: '',
           password: '',
           confirmPassword: ''
         }
     }
 
-    resetPassword = () => {
+    resetPassword = async () => {
         this._validateInputs(); 
   
         if(this.getErrorMessages().length == 0) {
-          this.props.navigation.navigate('SignIn')
+            try {
+                await Auth.forgotPasswordSubmit(this.state.username, 
+                        this.state.passcode, this.state.password);
+                this.props.navigation.navigate('SignIn');
+            } catch(error) {
+                console.log("Error in sending code", error);
+            }
         }
     }
 
@@ -38,6 +46,7 @@ export default class ResetPassword extends ValidationComponent {
         // Call ValidationComponent validate method
         this.validate({
             passcord: {required: true, numbers: true, minlength: 6, maxlength: 6},
+            username: {required: true, email: true},
             password: {required: true, minlength: 3, maxlength: 8},
             confirmPassword: {equalPassword : this.state.password}
         });
@@ -72,6 +81,30 @@ export default class ResetPassword extends ValidationComponent {
                                 {errorMessage}
                             </Text>) 
                         }
+                        <AppTextInput
+                            value={this.state.username}
+                            onChangeText={(username) => {
+                            this.setState({ username },
+                                () => {
+                                    this.validate({
+                                        username: { required: true, email: true },
+                                    })
+                                    }
+                                )                                    
+                            }
+                            }
+                            leftIcon="email-open"
+                            placeholder="Enter username"
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
+                            />
+                            {this.isFieldInError('username') 
+                                && this.getErrorsInField('username').map(errorMessage => 
+                                <Text key={errorMessage} style={styles.errorMsgText}>
+                                    {errorMessage}
+                                </Text>) 
+                            }
                         <AppTextInput
                             value={this.state.password}
                             onChangeText={(password) => {
