@@ -24,6 +24,7 @@ export default class RequestOTP extends ValidationComponent {
       if(this.getErrorMessages().length == 0) {
           try {
               await Auth.forgotPassword(this.state.username);
+              console('Sent the OTP');
               this.props.navigation.navigate('ResetPassword');
           } catch(error) {
               console.log("Error in sending code", error);

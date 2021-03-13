@@ -25,7 +25,7 @@ export default class ConfirmSignUp extends ValidationComponent {
   
         if(this.getErrorMessages().length == 0) {
             try {
-                await Auth.confirmSignUp(username, authCode);
+                await Auth.confirmSignUp(this.state.username, this.state.passcode);
                 console.log(' Code confirmed');
                 this.props.navigation.navigate('SignIn');
             } catch(error) {

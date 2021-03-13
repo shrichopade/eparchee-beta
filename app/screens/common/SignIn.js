@@ -28,7 +28,7 @@ export default class SignIn extends ValidationComponent {
             
             try {
                 await Auth.signIn(this.state.username, this.state.password);
-                console.log(' Success Login');
+                console.log(' Successfully Login');
                 //updateAuthState('loggedIn');
 
                 if(this.state.username == "P@gmail.com" || this.state.username == "p@gmail.com" ) {
@@ -40,7 +40,6 @@ export default class SignIn extends ValidationComponent {
                 } else {
                     this.props.navigation.navigate('PatientHome')
                 }
-                console.log(' Success');
             } catch(UserNotFoundException) {
                 console.log('User not found => ', UserNotFoundException)
                 this.props.navigation.navigate('SignIn', {loginStatus: 'Invalid login details, Please try again...'})
