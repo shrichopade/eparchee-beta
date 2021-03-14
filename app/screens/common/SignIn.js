@@ -18,8 +18,9 @@ export default class SignIn extends ValidationComponent {
         this.state = {
           username: '',
           password: '',
+          loginStatus: '',
         }
-      }
+    }
 
     signIn = async () => {
         this._validateInputs(); 
@@ -43,7 +44,6 @@ export default class SignIn extends ValidationComponent {
             } catch(UserNotFoundException) {
                 console.log('User not found => ', UserNotFoundException)
                 this.props.navigation.navigate('SignIn', {loginStatus: 'Invalid login details, Please try again...'})
-                console.log('NAV -->', this.props.navigation)
             }
         }
     }
@@ -63,10 +63,12 @@ export default class SignIn extends ValidationComponent {
     }
 
     render() {
-        //const { params } = this.props.navigation.state;
-        //const { loginStatus } = params ? params.loginStatus : null;
-        //const loginStatus = this.props.navigation.getParam('loginStatus', '')
-        //const { loginStatus } = "Invalid user";
+        const { params } = this.props.route;
+        if(params == null) {
+            this.state.loginStatus = '';  
+        } else {
+            this.state.loginStatus = params.loginStatus;
+        }
 
         return (
             <SafeAreaView  style={pageStyles.container}>
@@ -75,9 +77,9 @@ export default class SignIn extends ValidationComponent {
                         <Image source={require('../../../assets/images/parchee-logo.png')} 
                             style={styles.imageTitle} />
                         
-                        {/*<Text key="loginStatus" style={styles.errorMsgText}>
-                            { loginStatus }
-                        </Text> */}
+                        <Text key="loginStatus" style={styles.topErrorMsgText}>
+                            { this.state.loginStatus }
+                        </Text>
 
                         <AppTextInput
                             value={this.state.username}
@@ -207,5 +209,13 @@ const styles = StyleSheet.create({
         marginTop: 2,
         marginRight: 5,
         alignSelf: 'center'
+    },
+    topErrorMsgText: {
+        fontFamily: 'Arial',
+        color: 'red',
+        fontSize: 14,
+        marginLeft: 15,
+        marginBottom: 10,
+        alignSelf: 'center',
     },
 });
