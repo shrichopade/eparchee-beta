@@ -22,6 +22,27 @@ export default class SignIn extends ValidationComponent {
         }
     }
 
+    signInDefault = () => {
+        this._validateInputs(); 
+
+        if(this.getErrorMessages().length == 0) {
+            try {
+                if(this.state.username == "P@gmail.com" || this.state.username == "p@gmail.com" ) {
+                this.props.navigation.navigate('PatientHome')
+                } else if(this.state.username == "D@gmail.com" || this.state.username == "d@gmail.com" ) {
+                this.props.navigation.navigate('DoctorHome')
+                } else if(this.state.username == "C@gmail.com" || this.state.username == "c@gmail.com" ) {
+                this.props.navigation.navigate('ChemistHome')
+                } else {
+                this.props.navigation.navigate('PatientHome')
+                }
+                console.log(' Success');
+            } catch (error) {
+                console.log(' Error signing in...', error);
+            }
+        }
+    }
+
     signIn = async () => {
         this._validateInputs(); 
 
@@ -131,7 +152,7 @@ export default class SignIn extends ValidationComponent {
                             </Text>) 
                         }
                         <View style={styles.buttonContainer}>    
-                            <AppButton title="Sign In" onPress={() => this.signIn()} />
+                            <AppButton title="Sign In" onPress={() => this.signInDefault()} />
                         </View>
                         <View style={styles.buttonParallel}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('RequestOTP')}>

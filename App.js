@@ -65,13 +65,7 @@ import ChemistConfirmChanges from './app/screens/chemist/profile/ConfirmChanges'
 import Amplify from 'aws-amplify';
 import config from './aws-exports';
 
-Amplify.configure({
-  ...config,
-  Analytics: {
-    disabled: true,
-  }
-});
-import { withAuthenticator } from 'aws-amplify-react-native';
+//X import { withAuthenticator } from 'aws-amplify-react-native';
 
 const Stack = createStackNavigator();
 
@@ -168,4 +162,5 @@ const styles = StyleSheet.create({
 });
 
 // wrap the App component as shown below
-export default withAuthenticator(App);
+//X export default withAuthenticator(App);
+export default App;

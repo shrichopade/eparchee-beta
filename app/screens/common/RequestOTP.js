@@ -18,6 +18,14 @@ export default class RequestOTP extends ValidationComponent {
       }
     }
 
+    requestOTPDefault = () => {
+      this._validateInputs(); 
+
+      if(this.getErrorMessages().length == 0) {
+        this.props.navigation.navigate('ResetPassword')
+      }
+    }
+
     requestOTP = async () => {
       this._validateInputs(); 
 
@@ -70,7 +78,7 @@ export default class RequestOTP extends ValidationComponent {
                         }
                     <View style={styles.buttonContainer}>    
                         <AppButton title="Send Code" 
-                            onPress={() => this.requestOTP() } />
+                            onPress={() => this.requestOTPDefault() } />
                     </View>
                 </View>
                 <View style={pageStyles.footer}>

@@ -26,6 +26,14 @@ export default class SignUp extends ValidationComponent {
         }
     }
 
+    signUpDefault = () => {
+        this._validateInputs(); 
+  
+        if(this.getErrorMessages().length == 0) {
+          this.props.navigation.navigate('ConfirmSignUp')
+        }
+    }
+
     signUp = async () => {
         this._validateInputs(); 
   
@@ -258,7 +266,7 @@ export default class SignUp extends ValidationComponent {
                         }
                         <View style={styles.buttonContainer}>    
                             <AppButton title="Confirm" 
-                                onPress={() => this.signUp() } />
+                                onPress={() => this.signUpDefault() } />
                         </View>
                     </View>
                     <View style={pageStyles.footer}>

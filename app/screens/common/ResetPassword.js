@@ -22,6 +22,14 @@ export default class ResetPassword extends ValidationComponent {
         }
     }
 
+    resetPasswordDefault = () => {
+        this._validateInputs(); 
+  
+        if(this.getErrorMessages().length == 0) {
+          this.props.navigation.navigate('SignIn')
+        }
+    }
+
     resetPassword = async () => {
         this._validateInputs(); 
   
@@ -158,7 +166,7 @@ export default class ResetPassword extends ValidationComponent {
                         }
                         <View style={styles.buttonContainer}>    
                             <AppButton title="Reset Password" 
-                                onPress={() => this.resetPassword() } />
+                                onPress={() => this.resetPasswordDefault() } />
                         </View>
                     </View>
                     <View style={pageStyles.footer}>
